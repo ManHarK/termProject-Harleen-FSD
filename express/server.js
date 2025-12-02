@@ -4,6 +4,15 @@ const sqlite3 = require("sqlite3").verbose();
 const path = require("path");
 const app = express();
 
+const fs = require("fs");
+
+// Check and initialize database if needed
+if (!fs.existsSync("./db/database.db")) {
+  console.log("Database not found, running import script...");
+  require("./data/import.js");
+}
+
+
 require('dotenv').config();
 const port = process.env.PORT || 3000;
 
