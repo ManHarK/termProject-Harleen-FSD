@@ -2,12 +2,13 @@ const express = require("express");
 const cors = require("cors");
 const sqlite3 = require("sqlite3").verbose();
 const path = require("path");
+const fs = require("fs");
 const app = express();
 
-const fs = require("fs");
 
 require('dotenv').config();
 const port = process.env.PORT || 3000;
+
 
 
 // Check and initialize database if needed
@@ -26,7 +27,7 @@ const gardenRoutes = require("./routes/gardenRoutes");
 app.use("/api/v1/gardens", gardenRoutes);
 
 // For any other route, serve React's index.html
-app.get("*", (req, res) => {
+app.get("/*", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
