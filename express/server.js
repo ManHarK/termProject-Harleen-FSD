@@ -1,7 +1,6 @@
-// Project/express/server.js
+// Project/express/server.js 
 const express = require("express");
 const cors = require("cors");
-const sqlite3 = require("sqlite3").verbose();
 const path = require("path");
 const fs = require("fs");
 const app = express();
@@ -20,20 +19,40 @@ if (!fs.existsSync(dbPath)) {
 }
 
 // Serve static files from React build
-app.use(express.static(path.join(__dirname, "public")));
+const publicPath = path.join(__dirname, "public");
+if (fs.existsSync(publicPath)) {
+  app.use(express.static(publicPath));
+  console.log("Static files served from:", publicPath);
+} else {
+  console.warn("Public folder not found. Build React first.");
+}
 
 const gardenRoutes = require("./routes/gardenRoutes");
-app.use("/api/v1/gardens", gardenRoutes);  
+app.use("/api/v1/gardens", gardenRoutes);
 
-
-app.get("/*", (req, res, next) => {
+app.get("*", (req, res) => {
   if (req.path.startsWith("/api")) {
-    return next();
+    return res.status(404).json({ error: "API endpoint not found" });
   }
-  // Serve React for all other routes
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+  
+  // Serve React app
+  const indexPath = path.join(__dirname, "public", "index.html");
+  if (fs.existsSync(indexPath)) {
+    res.sendFile(indexPath);
+  } else {
+    res.send(`
+      <html>
+        <body>
+          <h1>Vancouver Gardens</h1>
+          <p>Server is running! React build not found.</p>
+          <p>API is available at <a href="/api/v1/gardens">/api/v1/gardens</a></p>
+        </body>
+      </html>
+    `);
+  }
 });
 
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+  console.log(` Server running on port ${port}`);
+  console.log(`API is available at http://localhost:${port}/api/v1/gardens`);
 });
