@@ -26,7 +26,7 @@ const gardenRoutes = require("./routes/gardenRoutes");
 app.use("/api/v1/gardens", gardenRoutes);  
 
 
-app.get("*", (req, res, next) => {
+app.get("/*", (req, res, next) => {
   if (req.path.startsWith("/api")) {
     return next();
   }
