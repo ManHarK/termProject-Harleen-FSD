@@ -6,15 +6,15 @@ const app = express();
 
 const fs = require("fs");
 
+require('dotenv').config();
+const port = process.env.PORT || 3000;
+
+
 // Check and initialize database if needed
 if (!fs.existsSync("./db/database.db")) {
   console.log("Database not found, running import script...");
   require("./data/import.js");
 }
-
-
-require('dotenv').config();
-const port = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());

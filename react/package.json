@@ -2,8 +2,8 @@
   "name": "vancouver-community-gardens-client",
   "version": "1.0.0",
   "scripts": {
-    "dev": "npx parcel watch src/index.jsx --dist-dir ../express/public",
-    "start": "npx parcel build src/index.jsx --dist-dir ../express/public"
+    "dev": "npx parcel watch src/index.html --dist-dir ../express/public",
+    "start": "npx parcel build src/index.html --dist-dir ../express/public --public-url ./"
   },
   "dependencies": {
     "leaflet": "^1.9.4",
